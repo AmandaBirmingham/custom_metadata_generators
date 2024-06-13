@@ -1,0 +1,263 @@
+"desired_plates":
+##  - "172"
+##  - "173"
+##  - "174"
+##  - "175"
+##  - "176"
+##  - "177"
+##  - "178"
+##  - "179"
+##  - "180"
+##  - "181"
+##  - "182"
+##  - "183"
+##  - "184"
+##  - "185"
+##  - "186"
+##  - "187"
+##  - "188"
+##  - "189"
+##  - "190"
+##  - "191"
+##  - "192"
+##  - "193"
+##  - "194"
+##  - "195"
+##  - "196"
+##  - "197"
+##  - "198"
+##  - "199"
+##  - "200"
+##  - "201"
+##  - "202"
+##  - "203"
+##  - "204"
+##  - "205"
+##  - "206"
+##  - "207"
+##  - "208"
+##  - "209"
+##  - "210"
+##  - "211"
+##  - "212"
+##  - "213"
+##  - "214"
+##  - "215"
+##  - "216"
+##  - "217"
+##  - "218"
+##  - "219"
+##  - "220"
+##  - "221"
+##  - "222"
+##  - "223"
+##  - "224"
+##  - "225"
+##  - "226"
+##  - "227"
+##  - "228"
+##  - "229"
+##  - "230"
+##  - "231"
+##  - "232"
+##  - "233"
+##  - "234"
+##  - "235"
+##  - "236"
+##  - "237"
+##  - "238"
+##  - "239"
+##  - "240"
+##  - "241"
+##  - "242"
+##  - "243"
+# - "244"
+ - "245"
+ - "246"
+##  - "247"
+# - "248"
+# - "249"
+# - "250"
+# - "251"
+##  - "252"
+##  - "253"
+ - "254"
+##  - "255"
+##  - "256"
+# - "257"
+# - "258"
+ - "259"
+# - "260"
+# - "261"
+ - "262"
+# - "263"
+# - "264"
+# - "265"
+# - "266"
+ - "267"
+"assume_dates_present": true
+"default": "not applicable"
+"study_start_date": "10/21/2008"
+"locations":
+  "sandiego":
+    "constant_fields":
+      "elevation": 193
+      "geo_loc_name": "USA:CA:San Diego"
+      "latitude": 32.84
+      "longitude": -117.25
+  "boulder":
+    "constant_fields":
+      "elevation": 1624.1
+      "geo_loc_name": "USA:CO:Boulder"
+      "latitude": 40.1
+      "longitude": -105.2
+"subject_specific_metadata":
+  "rk":
+    "date_of_birth": "11/13/1976"
+    "location_break":
+      "before_location": "boulder"
+      "after_location": "sandiego"
+      "after_start_date": "01/01/2015"
+#    "constant_fields":
+#      # NB: this is HOSTTYPE_SHORTHAND_KEY from QIIMP2
+#      "hosttype_shorthand": "human"
+#      "host_subject_id": "M03"
+#      "host_height": 165
+#      "host_nation": "New Zealand"
+#      "life_stage": "adult"
+#      "sex": "male"
+  "blank":
+    "location": "sandiego"
+#    "constant_fields":
+#        "hosttype_shorthand": "sterile_water_blank"
+"study_specific_metadata":
+  "host_type_specific_metadata":
+    ebi_submittable:
+      metadata_fields:
+        country:
+          allowed:
+            - "USA"
+          default: "USA"
+          type: string
+        dna_extracted:
+          allowed:
+            - 'TRUE'
+          default: 'TRUE'
+          type: string
+        physical_specimen_location:
+          allowed:
+            - 'UCSDMI'
+          default: "UCSDMI"
+          type: string
+        physical_specimen_remaining:
+          allowed:
+            - 'FALSE'
+          default: 'FALSE'
+          type: string
+        public:
+          allowed:
+            - 'TRUE'
+          default: 'TRUE'
+          type: string
+        qiita_study_id:
+          allowed:
+            - '11052'
+          default: '11052'
+          type: string
+        single_double_swab_test:
+          allowed:
+            - "leaveblank"
+          default: "leaveblank"
+          type: string
+        title:
+          allowed:
+            - "ABTX"
+          default: "ABTX"
+          type: string
+    human:
+      default: "not provided"
+      sample_type_specific_metadata:
+        skin of breast:
+          metadata_fields:
+            description:
+              allowed:
+                - "breast"
+              default: "breast"
+              type: string
+        br:
+          alias: skin of breast
+        feces:
+          metadata_fields:
+            description:
+              allowed:
+                - stool
+              default: stool
+              type: string
+        fe:
+          alias: feces
+        st:
+          alias: feces
+        saliva:
+          metadata_fields:
+            description:
+              allowed:
+                - saliva
+              default: saliva
+              type: string
+        t:
+          alias: saliva
+        ta:
+          alias: saliva
+        tb:
+          alias: saliva
+        "skin of forehead":
+          metadata_fields:
+            description:
+              allowed:
+                - "skin of forehead"
+              default: "skin of forehead"
+              type: string
+        "fh":
+          alias: skin of forehead
+        "fha":
+          alias: skin of forehead
+        "fhb":
+          alias: skin of forehead
+        "frh":
+          alias: skin of forehead
+        skin of left hand:
+          metadata_fields:
+            description:
+              allowed:
+                - "skin of left hand"
+              default: "skin of left hand"
+              type: string
+        "lh":
+          alias: skin of left hand
+        "lha":
+          alias: skin of left hand
+        "lhb":
+          alias: skin of left hand
+        "lp":
+          alias: skin of left hand
+        "lpalm":
+          alias: skin of left hand
+        skin of right hand:
+          metadata_fields:
+            description:
+              allowed:
+                - "skin of right hand"
+              default: "skin of right hand"
+              type: string
+        "rh":
+          alias: skin of right hand
+        "rha":
+          alias: skin of right hand
+        "rhb":
+          alias: skin of right hand
+        "rp":
+          alias: skin of right hand
+    "sterile_water_blank":
+      "sample_type_specific_metadata":
+        "blank":
+          "alias": "control blank"
