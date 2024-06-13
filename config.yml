@@ -1,4 +1,5 @@
 "default": "not applicable"
+"leave_requireds_blank": false
 "study_start_date": "10/21/2008"
 "study_specific_metadata":
   "host_type_specific_metadata":
@@ -15,9 +16,12 @@
           default: 'TRUE'
           type: string
         title:
+          allowed:
+            - "NPH"
           default: "NPH"
           type: string
     "human":
+      "default": "not provided"
       "metadata_fields":
         elevation:
           default: 0
@@ -70,7 +74,7 @@
               required: false
               type: string
     "sterile_water_blank":
-      "default_value": "not applicable"
+      "default": "not applicable"
       "sample_type_specific_metadata":
         "control shield":
           "metadata_fields":

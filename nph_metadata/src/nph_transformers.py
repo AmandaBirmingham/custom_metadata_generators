@@ -1,5 +1,5 @@
-from qiimp.src.metadata_extender import HOSTTYPE_SHORTHAND_KEY
-from qiimp.src.metadata_transformers import format_a_datetime
+from qiimp import HOSTTYPE_SHORTHAND_KEY
+from qiimp import format_a_datetime
 from nph_metadata.src.nph_literals import *
 
 

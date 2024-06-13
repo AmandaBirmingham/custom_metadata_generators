@@ -1,12 +1,14 @@
 import os
 import pandas
-from qiimp.src.metadata_extender import \
+from qiimp import  \
     HOSTTYPE_SHORTHAND_KEY, SAMPLETYPE_SHORTHAND_KEY, SAMPLE_TYPE_KEY, \
-    extract_config_dict, generate_extended_metadata_file_from_raw_metadata_df
+    extract_config_dict, load_df_with_best_fit_encoding, \
+    generate_extended_metadata_file_from_raw_metadata_df
 from nph_metadata.src.nph_literals import *
 from nph_metadata.src.nph_transformers import format_real_vs_blanks_dates
 
 CORE_SAMPLE_NAME_KEY = "sample_name"
+HOST_SUBJECT_ID_KEY = "host_subject_id"
 CORE_SAMPLE_ID_KEY = "mayo_sample_id"
 MANIFEST_SAMPLE_ID_KEY = "sample_id"
 TUBE_CODE_KEY = "TubeCode"
@@ -49,7 +51,10 @@ def _lazy_load_manifests(samples_df, manifests_dir):
         # get the file name from the current manifest file path
         curr_manifest_fn = os.path.basename(curr_manifest_fp)
 
-        curr_manifest_df = pandas.read_csv(curr_manifest_fp, sep="\t")
+        if curr_manifest_fn.startswith("."):
+            continue
+
+        curr_manifest_df = load_df_with_best_fit_encoding(curr_manifest_fp, "\t")
         curr_manifest_df[MANIFEST_FILE_NAME_KEY] = curr_manifest_fn
         curr_manifest_df[MANIFEST_SAMPLE_ID_KEY] = \
             curr_manifest_df[MANIFEST_SAMPLE_ID_KEY].astype("string")
@@ -105,10 +110,9 @@ def _get_fps_youngest_to_oldest(inputs_dir):
 
 
 def _standardize_nph_input_metadata_df(input_metadata_df, extraction_yyyy_mm):
+    input_metadata_df[MATRIX_ID_KEY] = input_metadata_df[TUBE_ID_KEY]
     is_blank_mask = \
         input_metadata_df[CORE_SAMPLE_NAME_KEY].str.contains(BLANK_SUBSTRING)
-    input_metadata_df.loc[is_blank_mask, MATRIX_ID_KEY] = \
-        input_metadata_df.loc[is_blank_mask, TUBE_ID_KEY]
 
     input_metadata_df.loc[is_blank_mask, COLLECTION_DATE_TIME_KEY] = \
         extraction_yyyy_mm
@@ -124,6 +128,9 @@ def _standardize_nph_input_metadata_df(input_metadata_df, extraction_yyyy_mm):
         "control shield"
     input_metadata_df.loc[~is_blank_mask, SAMPLETYPE_SHORTHAND_KEY] = \
         input_metadata_df[SAMPLE_TYPE_KEY].str.lower()
+
+    input_metadata_df.loc[is_blank_mask, HOST_SUBJECT_ID_KEY] = \
+        input_metadata_df[CORE_SAMPLE_ID_KEY]
     return input_metadata_df
 
 
@@ -131,11 +138,12 @@ if __name__ == "__main__":
     # TODO: remove hardcoded arguments
     # raw_metadata_fp = "/Users/abirmingham/Desktop/metadata/test_raw_metadata_short.xlsx"
     # raw_metadata_fp = "/Users/abirmingham/Desktop/metadata/test_nph_metadata_short.xlsx"
-    core_file_fp = "/Users/abirmingham/Desktop/metadata/mod_NPH_011 Sample Processing spreadsheet_SAS KL.csv"
-    manifests_dir = "/Users/abirmingham/Desktop/metadata/manifests"
-    extraction_yyyy_mm = "2023-12"
+    # core_file_fp = "/Users/abirmingham/Desktop/metadata/mod_NPH_011 Sample Processing spreadsheet_SAS KL.csv"
+    core_file_fp = "/Users/abirmingham/Desktop/metadata/nph/NPH_016 Sample Processing spreadsheet_SAS KL.csv"
+    manifests_dir = "/Users/abirmingham/Desktop/metadata/nph/Manifests 3"
+    extraction_yyyy_mm = "2024-05"
     output_dir = "/Users/abirmingham/Desktop/"
-    output_base = "test_extended_metadata"
+    output_base = "NPH_016"
 
     nph_config_dict = extract_config_dict(None, starting_fp=__file__)
     nph_extendable_metadata_df = make_nph_extendable_metadata_df(
