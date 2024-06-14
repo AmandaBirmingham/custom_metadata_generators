@@ -27,6 +27,7 @@ def make_nph_extendable_metadata_df(
     samples_df = pandas.read_csv(core_file_fp)
     # rename the TUBE_CODE_KEY column to TUBE_ID_KEY
     samples_df.rename(columns={TUBE_CODE_KEY: TUBE_ID_KEY}, inplace=True)
+    samples_df[TUBE_ID_KEY] = samples_df[TUBE_ID_KEY].astype("string")
     samples_df[CORE_SAMPLE_ID_KEY] = \
         samples_df[CORE_SAMPLE_ID_KEY].astype("string")
 
@@ -123,6 +124,8 @@ def _standardize_nph_input_metadata_df(input_metadata_df, extraction_yyyy_mm):
     input_metadata_df.loc[is_blank_mask, HOSTTYPE_SHORTHAND_KEY] = \
         "sterile_water_blank"
     input_metadata_df.loc[~is_blank_mask, HOSTTYPE_SHORTHAND_KEY] = "human"
+    input_metadata_df.loc[~is_blank_mask, SAMPLE_TYPE_KEY] = \
+        input_metadata_df.loc[~is_blank_mask, SAMPLE_TYPE_KEY].str.lower()
 
     input_metadata_df.loc[is_blank_mask, SAMPLETYPE_SHORTHAND_KEY] = \
         "control shield"
