@@ -9,7 +9,7 @@ from qiimp import SAMPLETYPE_SHORTHAND_KEY, QC_NOTE_KEY, DO_NOT_USE_VAL, \
     COLLECTION_TIMESTAMP_KEY, \
     extract_config_dict, deepcopy_dict, \
     merge_sample_and_subject_metadata, \
-    generate_extended_metadata_file_from_raw_metadata_df
+    write_extended_metadata_from_df
 
 # internal code keys
 PLATE_SAMPLE_ID_KEY = "plate_sample_id"
@@ -77,10 +77,21 @@ def make_abtx_extendable_metadata_df(
                 desired_plate_dfs.append(curr_transformed_df)
         # endif this is a desired plate
     # next plate
+
+    if DESIRED_PLATES_KEY in config:
+        missing_plate_nums = [x for x in config[DESIRED_PLATES_KEY]
+                              if x not in found_platemaps_by_num.keys()]
+        if len(missing_plate_nums) > 0:
+            raise ValueError(
+                f"Desired plates not found in platemap file: "
+                f"{sorted(missing_plate_nums)}")
+        # end if there are missing plates
+    # end if specific desired plates are specified
+
     total_desired_plates_df = pandas.concat(desired_plate_dfs, ignore_index=True)
 
     metadata_df = _mine_plate_sample_id_for_metadata(total_desired_plates_df)
-    subject_metadata_df = pandas.read_csv(subject_metadata_fp, dtype=str)
+    subject_metadata_df = pandas.read_csv(subject_metadata_fp)  #, dtype=str)
 
     merged_metadata_df = merge_sample_and_subject_metadata(
         metadata_df, subject_metadata_df, SUBJECT_SHORTHAND_KEY)
@@ -702,6 +713,11 @@ if __name__ == "__main__":
         a_platemap_fp, included_sheet_names_list, subject_metadata_fp,
         config_dict)
 
-    generate_extended_metadata_file_from_raw_metadata_df(
+    # # TODO: remove write for qiimp debugging
+    # extendable_metadata_df.to_csv(
+    #     "/Users/abirmingham/Desktop/extended_abtx_metadata.csv",
+    #     index=False)
+
+    write_extended_metadata_from_df(
         extendable_metadata_df, config_dict, output_dir, output_base,
-        study_specific_transformers_dict=None)
+        study_specific_transformers_dict=None, suppress_empty_fails=True)
