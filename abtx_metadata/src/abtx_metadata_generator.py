@@ -4,6 +4,7 @@ import string
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from openpyxl import load_workbook
+from qiimp.src.metadata_extender import INTERNAL_COL_KEYS
 from qiimp import SAMPLETYPE_SHORTHAND_KEY, QC_NOTE_KEY, DO_NOT_USE_VAL, \
     LEAVE_BLANK_VAL, HOST_SUBJECT_ID_KEY, SAMPLE_NAME_KEY, \
     COLLECTION_TIMESTAMP_KEY, \
@@ -50,10 +51,9 @@ NOTES_KEY = "notes"
 BLANK_VAL = "blank"
 
 # columns added to the metadata that are not actually part of it
-INTERNAL_COL_KEYS = [PLATE_ID_KEY, PLATE_ROW_ID_KEY, PLATE_COL_ID_KEY,
-                     PLATE_SAMPLE_ID_KEY, PLATING_NOTES_KEY, PLATING_DATE_KEY,
-                     SUBJECT_SHORTHAND_KEY, SAMPLETYPE_SHORTHAND_KEY,
-                     QC_NOTE_KEY]
+ABTX_INTERNAL_COL_KEYS = [PLATE_ID_KEY, PLATE_ROW_ID_KEY, PLATE_COL_ID_KEY,
+                          PLATE_SAMPLE_ID_KEY, PLATING_NOTES_KEY,
+                          PLATING_DATE_KEY, SUBJECT_SHORTHAND_KEY]
 
 
 def make_abtx_extendable_metadata_df(
@@ -91,7 +91,7 @@ def make_abtx_extendable_metadata_df(
     total_desired_plates_df = pandas.concat(desired_plate_dfs, ignore_index=True)
 
     metadata_df = _mine_plate_sample_id_for_metadata(total_desired_plates_df)
-    subject_metadata_df = pandas.read_csv(subject_metadata_fp)  #, dtype=str)
+    subject_metadata_df = pandas.read_csv(subject_metadata_fp)  # , dtype=str)
 
     merged_metadata_df = merge_sample_and_subject_metadata(
         metadata_df, subject_metadata_df, SUBJECT_SHORTHAND_KEY)
@@ -399,7 +399,6 @@ def _set_metadata_for_blanks(metadata_df):
     metadata_df.loc[blank_host_mask, HOST_SUBJECT_ID_KEY] = \
         metadata_df.loc[blank_host_mask, DESCRIPTION_KEY] = \
         metadata_df.loc[blank_host_mask, SAMPLE_NAME_KEY]
-    #metadata_df.loc[blank_host_mask, SUBJECT_SHORTHAND_KEY] = BLANK_VAL
     metadata_df.loc[blank_host_mask, SAMPLETYPE_SHORTHAND_KEY] = BLANK_VAL
 
     # This provisionally sets the collection date to the plating date.
@@ -628,7 +627,8 @@ def _get_collection_dates(plates_df, start_date_str):
             try:
                 sample_date = parser.parse(
                     putative_date_str, fuzzy=True, dayfirst=False)
-            except:
+            except:  # noqa E722
+                # if you can't parse it for any reason, it stays None
                 pass
 
         # sanity check: can't be before study start date
@@ -664,7 +664,8 @@ def _get_duration_since_date(plates_df, start_date_str, return_years=True):
                 a_timedelta = input_date - start_date
                 result = a_timedelta.days
             result = int(result)
-        except:
+        except:  # noqa E722
+            # if you can't parse it for any reason, it stays None
             pass
         return result
 
@@ -718,6 +719,10 @@ if __name__ == "__main__":
     #     "/Users/abirmingham/Desktop/extended_abtx_metadata.csv",
     #     index=False)
 
+    internal_cols_to_remove = list(
+        set(ABTX_INTERNAL_COL_KEYS) | set(INTERNAL_COL_KEYS))
+
     write_extended_metadata_from_df(
         extendable_metadata_df, config_dict, output_dir, output_base,
-        study_specific_transformers_dict=None, suppress_empty_fails=True)
+        study_specific_transformers_dict=None, suppress_empty_fails=True,
+        internal_col_names=internal_cols_to_remove)
