@@ -20,6 +20,12 @@
             - "NPH"
           default: "NPH"
           type: string
+        tube_id:
+          empty: false
+          field_desc: The identification of the tube containing the sample.
+          is_phi: false
+          required: true
+          type: string
     "human":
       "default": "not provided"
       "metadata_fields":
@@ -108,7 +114,7 @@
               default: "TRUE"
               type: string
 "metadata_transformers":
-  "pre_population":
+  "pre_transformers":
     collection_date:
       sources:
         - "collection_date_time"
