@@ -90,7 +90,7 @@
               default: "control shield"
               type: string
             elevation:
-              default: 163
+              default: 193
               type: number
             geo_loc_name:
               allowed:
