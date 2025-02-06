@@ -79,6 +79,8 @@
               is_phi: false
               required: false
               type: string
+        "stool":
+          "base_type": "feces"
     "sterile_water_blank":
       "default": "not applicable"
       "sample_type_specific_metadata":
@@ -122,7 +124,7 @@
     collection_timestamp:
       sources:
         - "collection_date_time"
-      function: "format_real_vs_blanks_dates"
+      function: "transform_date_to_formatted_date"
     "host_age":
       "sources":
         - "age"
@@ -142,4 +144,4 @@
     sex:
       sources:
         - "sex_at_birth"
-      function: "transform_sex_at_birth_to_sex"
+      function: "transform_input_sex_to_std_sex"

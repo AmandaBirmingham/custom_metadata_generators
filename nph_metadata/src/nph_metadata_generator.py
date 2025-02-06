@@ -232,15 +232,11 @@ def _standardize_nph_input_metadata_df(input_metadata_df, extraction_yyyy_mm):
 
 if __name__ == "__main__":
     # TODO: remove hardcoded arguments
-    # raw_metadata_fp = "/Users/abirmingham/Desktop/metadata/test_raw_metadata_short.xlsx"
-    # raw_metadata_fp = "/Users/abirmingham/Desktop/metadata/test_nph_metadata_short.xlsx"
-    core_file_fp = "/Users/abirmingham/Desktop/metadata/nph/NPH_022 Sample Processing spreadsheet_SAS KL.csv"
-    # core_file_fp = "/Users/abirmingham/Desktop/metadata/nph/NPH_017 Sample Processing spreadsheet_SAS KL.csv"
-    # manifests_dir = "/Users/abirmingham/Desktop/metadata/nph/Manifests_06202024"
-    manifests_dir = "/Users/abirmingham/Desktop/metadata/nph/Archive_manfests_20240902"
-    extraction_yyyy_mm = "2024-09"
+    output_base = "NPH_031"
+    extraction_yyyy_mm = "2025-01"
+    manifests_dir = "/Users/abirmingham/Desktop/metadata/nph/Archive013025"
+    core_file_fp = f"/Users/abirmingham/Desktop/metadata/nph/{output_base} Sample Processing spreadsheet_SAS KL.csv"
     output_dir = "/Users/abirmingham/Desktop/"
-    output_base = "NPH_022"
 
     nph_config_dict = extract_config_dict(None, starting_fp=__file__)
     nph_extendable_metadata_df = make_nph_extendable_metadata_df(
