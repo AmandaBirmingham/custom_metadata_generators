@@ -247,6 +247,12 @@ def _get_platemap_dfs_by_num_from_file(path, included_sheet_names, config):
         # endif next row
     # endif next sheet name
 
+    if curr_platemap_num_str not in found_platemaps_by_num:
+        # if the last platemap was not finished, finish it up
+        curr_platemap_lines, curr_platemap_metadatas, curr_platemap_num_str = \
+            _finish_platemap(curr_platemap_lines, curr_platemap_metadatas,
+                             curr_platemap_num_str)
+
     return found_platemaps_by_num
 
 
