@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 import os
 import pandas
@@ -194,7 +195,8 @@ def _sanity_check_aggregated_manifests(aggregated_manifests_df, load_msgs_df):
 def _get_fps_youngest_to_oldest(inputs_dir):
     # get all the files that are immediate children of inputs_dir
     file_paths = [os.path.join(inputs_dir, x) for x in os.listdir(inputs_dir)
-                  if os.path.isfile(os.path.join(inputs_dir, x))]
+                  if os.path.isfile(os.path.join(inputs_dir, x))
+                  and x.endswith(".txt")]
     file_paths.sort(key=os.path.getmtime, reverse=True)
 
     # return file paths in reverse chronological order, with the
@@ -231,20 +233,50 @@ def _standardize_nph_input_metadata_df(input_metadata_df, extraction_yyyy_mm):
 
 
 if __name__ == "__main__":
-    # TODO: remove hardcoded arguments
-    output_base = "NPH_031"
-    extraction_yyyy_mm = "2025-01"
-    manifests_dir = "/Users/abirmingham/Desktop/metadata/nph/Archive013025"
-    core_file_fp = f"/Users/abirmingham/Desktop/metadata/nph/{output_base} Sample Processing spreadsheet_SAS KL.csv"
+    # import argparse
+    # parser = argparse.ArgumentParser(description='Generate NPH metadata')
+    # parser.add_argument('output_base', help='Output base name (e.g., NPH_031)')
+    # parser.add_argument('extraction_yyyy_mm', help='Extraction date in YYYY-MM format')
+    # parser.add_argument('manifests_dir', help='Directory containing manifest files')
+    # parser.add_argument('core_file_fp', help='Path to core file')
+    # parser.add_argument('output_dir', help='Output directory for generated files')
+    # args = parser.parse_args()
+
+    # 2025-02 NPH_032
+    # 2025-03 NPH_033
+    # 2025-03 NPH_034
+    # 2025-04 NPH_035
+    # 2025-04 NPH_036
+    # 2025-04 NPH_037
+    # 2025-05 NPH_038
+    # 2025-06 NPH_039
+    # 2025-07 NPH_040
+    # 2025-07 NPH_041
+    # 2025-07 NPH_042
+
+    output_base = "NPH_042"
+    extraction_yyyy_mm = "2025-07"
+    manifests_dir = "/Users/abirmingham/Work/Projects/nph/nph_metadata/manifests_20250805"
+    core_file_fp = f"/Users/abirmingham/Work/Projects/nph/nph_metadata/{output_base} Sample Processing spreadsheet_SAS KL.csv"
     output_dir = "/Users/abirmingham/Desktop/"
+
+    Arguments = namedtuple(
+        "Arguments", ["output_base", "extraction_yyyy_mm", "manifests_dir",
+                      "core_file_fp", "output_dir"])
+    args = Arguments(
+        output_base=output_base,
+        extraction_yyyy_mm=extraction_yyyy_mm,
+        manifests_dir=manifests_dir,
+        core_file_fp=core_file_fp,
+        output_dir=output_dir)
 
     nph_config_dict = extract_config_dict(None, starting_fp=__file__)
     nph_extendable_metadata_df = make_nph_extendable_metadata_df(
-        core_file_fp, manifests_dir, extraction_yyyy_mm)
+        args.core_file_fp, args.manifests_dir, args.extraction_yyyy_mm)
 
     nph_transformers_dict = \
         {"format_real_vs_blanks_dates": format_real_vs_blanks_dates}
 
     write_extended_metadata_from_df(
-        nph_extendable_metadata_df, nph_config_dict, output_dir, output_base,
+        nph_extendable_metadata_df, nph_config_dict, args.output_dir, args.output_base,
         study_specific_transformers_dict=nph_transformers_dict)
