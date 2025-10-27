@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nph-metadata"
+dynamic = ["version"]  # Version is derived automatically from git tags
+description = "Custom metadata generator utilities."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Amanda Birmingham", email = "abirmingham@ucsd.edu" }]
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nph_metadata*"]
+
+[tool.setuptools.package-data]
+nph_metadata = ["**/*.yml", "**/*.yaml", "**/*.txt"]
+
+[tool.setuptools_scm]
+write_to = "nph_metadata/_version.py"
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"

@@ -2,7 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 import os
 import pandas
-from qiimp import  \
+from metameq import  \
     HOSTTYPE_SHORTHAND_KEY, SAMPLETYPE_SHORTHAND_KEY, SAMPLE_TYPE_KEY, \
     extract_config_dict, load_df_with_best_fit_encoding, \
     write_extended_metadata_from_df
@@ -253,12 +253,17 @@ if __name__ == "__main__":
     # 2025-07 NPH_040
     # 2025-07 NPH_041
     # 2025-07 NPH_042
+    # 2025-08 NPH_043
+    # 2025-08 NPH_044
+    # 2025-08 NPH_045
+    # 2025-08 NPH_046
+    # 2025-09 NPH_047
 
-    output_base = "NPH_042"
+    output_base = "NPH_041"
     extraction_yyyy_mm = "2025-07"
-    manifests_dir = "/Users/abirmingham/Work/Projects/nph/nph_metadata/manifests_20250805"
-    core_file_fp = f"/Users/abirmingham/Work/Projects/nph/nph_metadata/{output_base} Sample Processing spreadsheet_SAS KL.csv"
-    output_dir = "/Users/abirmingham/Desktop/"
+    manifests_dir = "/Users/amandabirmingham/Work/Projects/nph/nph_metadata/manifests_20250805"
+    core_file_fp = f"/Users/amandabirmingham/Work/Projects/nph/nph_metadata/{output_base} Sample Processing spreadsheet_SAS KL.csv"
+    output_dir = "/Users/amandabirmingham/Desktop/"
 
     Arguments = namedtuple(
         "Arguments", ["output_base", "extraction_yyyy_mm", "manifests_dir",

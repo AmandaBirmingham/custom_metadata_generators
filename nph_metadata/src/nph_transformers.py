@@ -1,5 +1,5 @@
-from qiimp import HOSTTYPE_SHORTHAND_KEY
-from qiimp import transform_date_to_formatted_date
+from metameq import HOSTTYPE_SHORTHAND_KEY
+from metameq import transform_date_to_formatted_date
 from nph_metadata.src.nph_literals import *
 
 
