@@ -258,12 +258,16 @@ if __name__ == "__main__":
     # 2025-08 NPH_045
     # 2025-08 NPH_046
     # 2025-09 NPH_047
+    # 2025-09 NPH_048
+    # 2025-10 NPH_049
+    # 2025-10 NPH_050
 
-    output_base = "NPH_041"
-    extraction_yyyy_mm = "2025-07"
-    manifests_dir = "/Users/amandabirmingham/Work/Projects/nph/nph_metadata/manifests_20250805"
+    output_base = "NPH_050"
+    extraction_yyyy_mm = "2025-10"
+    manifests_dir = "/Users/amandabirmingham/Work/Projects/nph/nph_metadata/manifests_20251027"
     core_file_fp = f"/Users/amandabirmingham/Work/Projects/nph/nph_metadata/{output_base} Sample Processing spreadsheet_SAS KL.csv"
     output_dir = "/Users/amandabirmingham/Desktop/"
+    config_fp = "/Users/amandabirmingham/Work/Repositories/custom_nph_metadata_generator/config.yml"
 
     Arguments = namedtuple(
         "Arguments", ["output_base", "extraction_yyyy_mm", "manifests_dir",
@@ -275,7 +279,7 @@ if __name__ == "__main__":
         core_file_fp=core_file_fp,
         output_dir=output_dir)
 
-    nph_config_dict = extract_config_dict(None, starting_fp=__file__)
+    nph_config_dict = extract_config_dict(config_fp)
     nph_extendable_metadata_df = make_nph_extendable_metadata_df(
         args.core_file_fp, args.manifests_dir, args.extraction_yyyy_mm)
 
