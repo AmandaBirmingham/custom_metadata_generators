@@ -4,12 +4,12 @@ import string
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from openpyxl import load_workbook
-from qiimp import SAMPLETYPE_SHORTHAND_KEY, QC_NOTE_KEY, DO_NOT_USE_VAL, \
+from metameq import SAMPLETYPE_SHORTHAND_KEY, QC_NOTE_KEY, DO_NOT_USE_VAL, \
     LEAVE_BLANK_VAL, HOST_SUBJECT_ID_KEY, SAMPLE_NAME_KEY, \
     COLLECTION_TIMESTAMP_KEY, \
-    extract_config_dict, deepcopy_dict, \
+    extract_config_dict, build_full_flat_config_dict, deepcopy_dict, \
     merge_sample_and_subject_metadata, \
-    generate_extended_metadata_file_from_raw_metadata_df
+    write_extended_metadata_from_df
 
 # internal code keys
 PLATE_SAMPLE_ID_KEY = "plate_sample_id"
@@ -350,7 +350,7 @@ def _mine_plate_sample_id_for_metadata(metadata_df):
     original_collection_strs = \
         original_collection_strs + " " + time_str.fillna("")
     original_collection_strs = original_collection_strs.str.strip()
-    original_collection_strs[original_collection_strs == ""] = np.NAN
+    original_collection_strs[original_collection_strs == ""] = np.nan
     metadata_df[ORIGINAL_COLLECTION_TIMESTAMP_KEY] = original_collection_strs
 
     # Dig the subject and sample type shorthands out of the part of the sample
@@ -691,17 +691,26 @@ def _add_location_info_from_break(plates_df, location_break_dict, config):
 
 if __name__ == "__main__":
     # TODO: remove hardcoded arguments
-    a_platemap_fp = "/Users/abirmingham/Downloads/Rob_ABTX_Updated.xlsx"
+    a_platemap_fp = "/Users/amandabirmingham/Downloads/Rob_ABTX_Updated.xlsx"
     included_sheet_names_list = ["Platemaps"]
-    subject_metadata_fp = "/Users/abirmingham/Work/Repositories/custom_abtx_metadata_generator/abtx_subject_metadata.csv"
-    output_dir = "/Users/abirmingham/Desktop/"
+    subject_metadata_fp = "/Users/amandabirmingham/Work/Repositories/custom_abtx_metadata_generator/abtx_subject_metadata.csv"
+    output_dir = "/Users/amandabirmingham/Desktop/"
     output_base = "scraped_ABTX_metadata"
 
-    config_dict = extract_config_dict(None, starting_fp=__file__)
+    config_fp = "/Users/amandabirmingham/Work/Repositories/custom_abtx_metadata_generator/config.yml"
+    config_dict = extract_config_dict(config_fp=config_fp) # starting_fp=__file__)
+    flattened_dict = build_full_flat_config_dict(config_dict)
+
+    # # create a new file containing the flattened config dict
+    # flattened_config_fp = "/Users/amandabirmingham/Desktop/config_flattened.yml"
+    # with open(flattened_config_fp, 'w') as f:
+    #     import yaml
+    #     yaml.dump(flattened_dict, f)
+
     extendable_metadata_df = make_abtx_extendable_metadata_df(
         a_platemap_fp, included_sheet_names_list, subject_metadata_fp,
         config_dict)
 
-    generate_extended_metadata_file_from_raw_metadata_df(
+    write_extended_metadata_from_df(
         extendable_metadata_df, config_dict, output_dir, output_base,
         study_specific_transformers_dict=None)
