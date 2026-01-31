@@ -268,12 +268,26 @@
           alias: skin of forehead
         "frh":
           alias: skin of forehead
+        # below type is specific to this study and not
+        # defined in the standards, so it must have
+        # its base defined here
         skin of left hand:
+          base_type: skin
           metadata_fields:
             description:
               allowed:
                 - "skin of left hand"
               default: "skin of left hand"
+              type: string
+            host_body_site:
+              allowed:
+                - UBERON:skin of hand
+              default: UBERON:skin of hand
+              type: string
+            qiita_sample_type:
+              allowed:
+                - "skin"
+              default: "skin"
               type: string
         "lh":
           alias: skin of left hand
@@ -285,12 +299,26 @@
           alias: skin of left hand
         "lpalm":
           alias: skin of left hand
+        # below type is specific to this study and not
+        # defined in the standards, so it must have
+        # its base defined here
         skin of right hand:
+          base_type: skin
           metadata_fields:
             description:
               allowed:
                 - "skin of right hand"
               default: "skin of right hand"
+              type: string
+            host_body_site:
+              allowed:
+                - UBERON:skin of hand
+              default: UBERON:skin of hand
+              type: string
+            qiita_sample_type:
+              allowed:
+                - "skin"
+              default: "skin"
               type: string
         "rh":
           alias: skin of right hand
