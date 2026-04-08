@@ -9,7 +9,7 @@ from metameq import SAMPLETYPE_SHORTHAND_KEY, QC_NOTE_KEY, DO_NOT_USE_VAL, \
     COLLECTION_TIMESTAMP_KEY, \
     extract_config_dict, build_full_flat_config_dict, deepcopy_dict, \
     merge_sample_and_subject_metadata, \
-    write_extended_metadata_from_df
+    write_extended_metadata_from_df, write_extended_metadata
 
 # internal code keys
 PLATE_SAMPLE_ID_KEY = "plate_sample_id"
@@ -689,6 +689,26 @@ def _add_location_info_from_break(plates_df, location_break_dict, config):
     return output_df
 
 
+def _output_flattened_dict_to_file(output_dir, study_config_fp=None):
+    config_dict = {}
+    study_prefix = ""
+    if study_config_fp:
+        study_prefix = "abtx_"
+        config_dict = extract_config_dict(config_fp=study_config_fp)
+    flattened_dict = build_full_flat_config_dict(config_dict, exclude_internals=True)
+
+    # remove the following keys and their values from the flattened file if they exist:
+    keys_to_remove = ["desired_plates", "locations", "study_start_date", "subject_specific_metadata"]
+    for a_key in keys_to_remove:
+        flattened_dict.pop(a_key, None)
+
+    # # create a new file containing the flattened config dict
+    flattened_config_fp = f"{output_dir}{study_prefix}metameq_flattened.yml"
+    with open(flattened_config_fp, 'w') as f:
+        import yaml
+        yaml.dump(flattened_dict, f)
+
+
 if __name__ == "__main__":
     # TODO: remove hardcoded arguments
     a_platemap_fp = "/Users/amandabirmingham/Downloads/Rob_ABTX_Updated.xlsx"
@@ -696,21 +716,26 @@ if __name__ == "__main__":
     subject_metadata_fp = "/Users/amandabirmingham/Work/Repositories/custom_abtx_metadata_generator/abtx_subject_metadata.csv"
     output_dir = "/Users/amandabirmingham/Desktop/"
     output_base = "scraped_ABTX_metadata"
-
     config_fp = "/Users/amandabirmingham/Work/Repositories/custom_abtx_metadata_generator/config.yml"
-    config_dict = extract_config_dict(config_fp=config_fp) # starting_fp=__file__)
-    flattened_dict = build_full_flat_config_dict(config_dict)
 
-    # # create a new file containing the flattened config dict
-    # flattened_config_fp = "/Users/amandabirmingham/Desktop/config_flattened.yml"
-    # with open(flattened_config_fp, 'w') as f:
-    #     import yaml
-    #     yaml.dump(flattened_dict, f)
+    # # make flattened dicts
+    # _output_flattened_dict_to_file(output_dir, study_config_fp=config_fp)
+    # _output_flattened_dict_to_file(output_dir)
 
+    config_dict = extract_config_dict(config_fp)
     extendable_metadata_df = make_abtx_extendable_metadata_df(
         a_platemap_fp, included_sheet_names_list, subject_metadata_fp,
         config_dict)
+    
+    extendable_metadata_str_df = extendable_metadata_df.astype(str).replace("nan", np.nan)
 
     write_extended_metadata_from_df(
-        extendable_metadata_df, config_dict, output_dir, output_base,
+        extendable_metadata_str_df, config_dict, output_dir, output_base,
         study_specific_transformers_dict=None)
+
+    # TEMP:
+    # extendable_fp = "/Users/amandabirmingham/Work/Projects/metadata/abtx/2025-07-23_16-47-40_scraped_ABTX_metadata.txt"
+    # extendable_fp = "/Users/amandabirmingham/Downloads/2026-01-31_09-29-33_scraped_ABTX_metadata_extended.txt"
+
+    # write_extended_metadata(
+    #     extendable_fp, None, output_dir, output_base)
